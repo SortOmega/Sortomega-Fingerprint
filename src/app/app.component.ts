@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   #fingerPrintDevices: DeviceInfo[] = [];
   #selectedFingerprintDevice: DeviceInfo | null = null;
   #fingerSamplesAcquired: SamplesAcquired | null = null;
+  public fingerSampleImage: string = '';
 
   public get getSelectedFingerprintDevice() {
     return this.#selectedFingerprintDevice;
@@ -71,6 +72,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('En el evento: onSampleAdquired');
     console.log(event);
     this.#fingerSamplesAcquired = event;
+
+    let base64Data = this.#fingerSamplesAcquired
+      .samples[0] as unknown as string;
+    this.fingerSampleImage = this.fixFormatBase64(base64Data);
+    console.log(this.fingerSampleImage);
+    //Convertir cadena de datos en Blob
+
+    // let bmpData = this.#fingerSamplesAcquired.samples[0].Data;
+
+    // //Paso 2: Convertir la cadena de datos BMP a Blob
+    // let byteCharacters = atob(bmpData);
+    // let byteNumbers = new Array(byteCharacters.length);
+    // for (let i = 0; i < byteCharacters.length; i++) {
+    //   byteNumbers[i] = byteCharacters.charCodeAt(i);
+    // }
+    // let byteArray = new Uint8Array(byteNumbers);
+    // let blob = new Blob([byteArray], { type: 'image/bmp' });
+
+    // // Paso 3: Crear un objeto Image y convertir el Blob a una URL de datos
+    // let img = new Image();
+    // let reader = new FileReader();
+    // reader.onload = (event) => {
+    //   // Paso 4: Asignar la URL de datos al atributo src de la etiqueta img
+    //   this.fingerSampleImage = event.target!.result as string;
+    //   img.src = event.target!.result as string;
+    // };
+    // reader.readAsDataURL(blob);
+    // document.body.appendChild(img);
   };
   //#endregion
 
@@ -97,7 +126,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.#selectedFingerprintDevice !== null)
       this.#reader
         .startAcquisition(
-          SampleFormat.Raw,
+          SampleFormat.PngImage,
           this.#selectedFingerprintDevice.DeviceID
         )
         .then((response) => {
@@ -122,5 +151,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         .catch((error) => console.log(error));
   }
 
+  public get acquiredFingerPrintSample() {
+    return this.#fingerSamplesAcquired;
+  }
+
+  public fixFormatBase64(imgData: string) {
+    let strg = imgData;
+    strg = strg.replace(/_/g, '/');
+    strg = strg.replace(/-/g, '+');
+    return strg;
+  }
   //#endregion
 }

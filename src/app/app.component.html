@@ -13,6 +13,10 @@
     <button (click)="finishFingerprintCapture()">
       Terminar Lectura de Huellas
     </button>
-    <!-- <script src="modules/WebSdk/index.js"></script> -->
+
+    <img
+      width="300"
+      height="300"
+      [src]="'data:img/png;base64,' + fingerSampleImage" />
   </body>
 </html>
