@@ -20,9 +20,7 @@
     "module": "ES6",
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
-    "allowJs": true,
-    "typeRoots": ["./src/app/core/modules/WebSdk"],
-    "types": ["./src/app/core/modules/WebSdk"]
+    "allowJs": true
   },
   "include": ["./src/app/core/modules/WebSdk"],
   "angularCompilerOptions": {
